@@ -2,11 +2,14 @@ package com.ambigioz.goril.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.ambigioz.goril.GorilClass;
+import com.ambigioz.goril.Goril;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new GorilClass(), config);
+		config.title = "Goril";
+		config.width = 320;
+		config.height = 480;
+		new LwjglApplication(new Goril(), config);
 	}
 }
