@@ -2,6 +2,7 @@ package com.ambigioz.goril;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -48,7 +49,8 @@ public class ShapeManager {
 	    BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
 	    bodyDef.position.set(x, y);
-	    
+	    bodyDef.linearDamping = 40.5f;
+		bodyDef.angularDamping = 40.5f;
 	    PolygonShape dynamicPolygon = new PolygonShape();
 	    dynamicPolygon.setAsBox(size, size);
 	    
@@ -56,8 +58,8 @@ public class ShapeManager {
 
 	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = dynamicPolygon;
-	    fixtureDef.density = 1.0f;  
-	    fixtureDef.friction = 0.2f;  
+	    fixtureDef.density = 3.1f;
+	    fixtureDef.friction = 20.0f;
 	    fixtureDef.restitution = 0.0f;
 	    
 	    body.createFixture(fixtureDef);

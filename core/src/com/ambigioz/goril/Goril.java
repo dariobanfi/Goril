@@ -14,9 +14,8 @@ public class Goril extends Game {
 
 	@Override
 	public void create () {
-		Settings.load();
 		Assets.load();
-		setScreen(new MainMenuScreen(this));
+		setScreen(new GameScreen(this));
 	}
 
 	@Override

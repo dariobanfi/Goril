@@ -22,7 +22,7 @@ public class Tray {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = dynamicPolygon;
         fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.5f;
+        fixtureDef.friction = 10.5f;
         fixtureDef.restitution = 0.6f;
         trayBody.createFixture(fixtureDef);
     }

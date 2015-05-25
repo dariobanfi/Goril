@@ -121,7 +121,6 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void pause () {
-		Settings.save();
 	}
 
 	@Override

@@ -4,9 +4,9 @@ package com.ambigioz.goril;
 import com.ambigioz.goril.models.Ground;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,17 +17,17 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameScreen implements Screen, InputProcessor {
     
-    static final float BOX_STEP=1/60f;  
-    static final int BOX_VELOCITY_ITERATIONS=8;  
+    static final float BOX_STEP=1/60f;
+    static final int BOX_VELOCITY_ITERATIONS=8;
     static final int BOX_POSITION_ITERATIONS=3;
-    static final float SCALE = 5;
     static final float PPM = 100;
-    static float WALK_SPEED = 3;
-	static float ROTATION_SPEED = 2.0f;
+    static float WALK_SPEED = 1.0f;
+	static float ROTATION_SPEED = 1.0f;
 	boolean spawn = false;
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -48,6 +48,9 @@ public class GameScreen implements Screen, InputProcessor {
 
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
+
+		Timer timer = new Timer();
+		timer.schedule(myTask, 1000, 3000);
 	}
 	
 	@Override
@@ -62,7 +65,7 @@ public class GameScreen implements Screen, InputProcessor {
 	    
 	    rotation = 0f;
 	    
-		world = new World(new Vector2(0, -1.21f), true);
+		world = new World(new Vector2(0, -8.21f), true);
 		shapeManager = new ShapeManager(world);
 		debugRenderer = new Box2DDebugRenderer();
 
@@ -78,13 +81,14 @@ public class GameScreen implements Screen, InputProcessor {
 	    BodyDef bodyDef = new BodyDef();
 	    bodyDef.type = BodyType.KinematicBody;
 	    bodyDef.position.set((w / PPM) / 2 , h / PPM / 5);
+		bodyDef.angularDamping = 30.0f;
 	    tray = world.createBody(bodyDef);
 	    PolygonShape dynamicPolygon = new PolygonShape();
 	    dynamicPolygon.setAsBox((w / PPM) / 5 , 0.5f / PPM);
 	    FixtureDef fixtureDef = new FixtureDef();
 	    fixtureDef.shape = dynamicPolygon;
 	    fixtureDef.density = 1.0f;
-	    fixtureDef.friction = 0.5f;
+	    fixtureDef.friction = 1000.0f;
 	    fixtureDef.restitution = 0.0f;
 	    tray.createFixture(fixtureDef);
 	    
@@ -99,14 +103,18 @@ public class GameScreen implements Screen, InputProcessor {
 	    
 		
 	}
+
+	TimerTask myTask = new TimerTask() {
+		@Override
+		public void run() {
+			spawn = true;
+		}
+	};
 	
 	@Override
 	public void render(float delta) {
 
 		if(spawn) {
-			MathUtils.random(0, w/PPM);
-			MathUtils.random(0, h/PPM);
-			MathUtils.random(0, 50f / PPM);
 			spawn = false;
 			shapeManager.spawnSquareObject(MathUtils.random(0, w / PPM), h / PPM, 25f / PPM);
 		}
