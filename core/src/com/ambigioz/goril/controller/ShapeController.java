@@ -1,8 +1,10 @@
-package com.ambigioz.goril;
+package com.ambigioz.goril.controller;
 
+import com.ambigioz.goril.Assets;
+import com.ambigioz.goril.GameScreen;
+import com.ambigioz.goril.models.objects.FallingObject;
+import com.ambigioz.goril.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -11,12 +13,23 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class ShapeManager {
+public class ShapeController {
 
 	private World world;
 	
-	public ShapeManager(World world){
+	public ShapeController(World world){
 		this.world = world;
+	}
+
+
+	public void spawn(FallingObject obj){
+
+		Body body = world.createBody(obj.getBodyDef());
+
+		body.createFixture(obj.getFixtureDef());
+
+		body.setUserData(obj.getSprite());
+
 	}
 	
 	public void spawnSphericObject(float x, float y, float size){
@@ -51,17 +64,19 @@ public class ShapeManager {
 	    bodyDef.position.set(x, y);
 	    bodyDef.linearDamping = 40.5f;
 		bodyDef.angularDamping = 40.5f;
-	    PolygonShape dynamicPolygon = new PolygonShape();
-	    dynamicPolygon.setAsBox(size, size);
+
 	    
 	    Body body = world.createBody(bodyDef);
 
-	    FixtureDef fixtureDef = new FixtureDef();  
+		PolygonShape dynamicPolygon = new PolygonShape();
+		dynamicPolygon.setAsBox(size, size);
+
+	    FixtureDef fixtureDef = new FixtureDef();
 	    fixtureDef.shape = dynamicPolygon;
 	    fixtureDef.density = 3.1f;
 	    fixtureDef.friction = 20.0f;
 	    fixtureDef.restitution = 0.0f;
-	    
+
 	    body.createFixture(fixtureDef);
 	    
 	    Sprite polySprite = new Sprite(Assets.diamondRhombus);
@@ -73,7 +88,7 @@ public class ShapeManager {
 	}
 	
 	/**
-	 * @param x
+	 * @parwam x
 	 * @param y
 	 * @param size (the longest diameter of the hexagon)
 	 */
@@ -165,7 +180,7 @@ public class ShapeManager {
 	    body.createFixture(fixtureDef);
 	    
 	    Sprite polySprite = new Sprite(Assets.shapePolygon);
-	    polySprite.setSize(polySprite.getWidth() / GameScreen.PPM, polySprite.getHeight() / GameScreen.PPM);
+	    polySprite.setSize(polySprite.getWidth() / Constants.PPM, polySprite.getHeight() / Constants.PPM);
 	    //polySprite.setRotation(30);
 	    polySprite.setOrigin(0, 0);
 	    body.setUserData(polySprite);

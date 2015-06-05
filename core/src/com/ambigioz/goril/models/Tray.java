@@ -1,6 +1,7 @@
 package com.ambigioz.goril.models;
 
 import com.ambigioz.goril.util.Constants;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Tray {
@@ -25,6 +26,16 @@ public class Tray {
         fixtureDef.friction = 10.5f;
         fixtureDef.restitution = 0.6f;
         trayBody.createFixture(fixtureDef);
+
+    }
+
+
+    public void setLinearVelocity(Vector2 velocity){
+        trayBody.setLinearVelocity(velocity);
+    }
+
+    public void setAngularVelocity(float rotation){
+        trayBody.setAngularVelocity(rotation);
     }
 
 }

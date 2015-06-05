@@ -1,7 +1,10 @@
 package com.ambigioz.goril;
 
 
+import com.ambigioz.goril.controller.ShapeController;
 import com.ambigioz.goril.models.Ground;
+import com.ambigioz.goril.models.Level;
+import com.ambigioz.goril.models.Tray;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -14,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Timer;
@@ -34,13 +36,15 @@ public class GameScreen implements Screen, InputProcessor {
     private OrthographicCamera b2dCam;
     private SpriteBatch batcher;
     private Game game;
-    private Body tray;
+    private Tray tray;
     private Vector2 movement;
     private float rotation;
     private Array<Body> tempBodies = new Array<Body>();
     private float w;
     private float h;
-    private ShapeManager shapeManager;
+    private ShapeController shapeController;
+	private Level level;
+
 
 	public GameScreen(Game game){
 		this.game = game;
@@ -52,56 +56,59 @@ public class GameScreen implements Screen, InputProcessor {
 		Timer timer = new Timer();
 		timer.schedule(myTask, 1000, 3000);
 	}
+
+
+	public void setLevel(Level level){
+		this.level = level;
+	}
 	
 	@Override
 	public void show() {
+
+		setupWorld();
+
+		initGame();
+
+
+//	    shapeController.spawnSquareObject(w / PPM / 2, h / PPM / 1.5f, 50f / PPM);
+//	    shapeController.spawnRectangleGemObject(w / PPM / 2, h / PPM / 1f);
+//	    shapeController.spawnHexagonalObject(w / PPM / 2, h / PPM / 1, 80f / PPM);
+//	    shapeController.spawnEquilateralTriangleObject(w / PPM / 2, h / PPM / 1, 60f / PPM);
+//	    shapeController.spawnSphericObject(w / PPM / 2, h / PPM / 1.2f, 10f / PPM);
+//	    shapeController.spawnSphericObject(w / PPM / 2, h / PPM / 1.0f, 15f / PPM);
+//	    shapeController.spawnSphericObject(w / PPM / 2 / 5.0f, h / PPM / 1.0f, 20f / PPM);
+	    
+	    
 		
+	}
+
+	public void setupWorld(){
 		b2dCam = new OrthographicCamera();
 		b2dCam.setToOrtho(false, (w / PPM), (h / PPM));
 		b2dCam.update();
-	    
-	    batcher = new SpriteBatch();
-	    movement = new Vector2();
-	    
-	    rotation = 0f;
-	    
+
+		batcher = new SpriteBatch();
+		movement = new Vector2();
+
+		rotation = 0f;
+
 		world = new World(new Vector2(0, -8.21f), true);
-		shapeManager = new ShapeManager(world);
+		shapeController = new ShapeController(world);
 		debugRenderer = new Box2DDebugRenderer();
+	}
 
 
-
-	    //Ground body
-
+	public void initGame(){
+		//Ground body
 		Ground ground = new Ground(world);
 		ground.init(w,h);
 
-	    // Tray
+		// Tray
+		tray = new Tray(world);
+		tray.init(w,h);
 
-	    BodyDef bodyDef = new BodyDef();
-	    bodyDef.type = BodyType.KinematicBody;
-	    bodyDef.position.set((w / PPM) / 2 , h / PPM / 5);
-		bodyDef.angularDamping = 30.0f;
-	    tray = world.createBody(bodyDef);
-	    PolygonShape dynamicPolygon = new PolygonShape();
-	    dynamicPolygon.setAsBox((w / PPM) / 5 , 0.5f / PPM);
-	    FixtureDef fixtureDef = new FixtureDef();
-	    fixtureDef.shape = dynamicPolygon;
-	    fixtureDef.density = 1.0f;
-	    fixtureDef.friction = 1000.0f;
-	    fixtureDef.restitution = 0.0f;
-	    tray.createFixture(fixtureDef);
-	    
-//	    shapeManager.spawnSquareObject(w / PPM / 2, h / PPM / 1.5f, 50f / PPM);
-//	    shapeManager.spawnRectangleGemObject(w / PPM / 2, h / PPM / 1f);
-//	    shapeManager.spawnHexagonalObject(w / PPM / 2, h / PPM / 1, 80f / PPM);
-//	    shapeManager.spawnEquilateralTriangleObject(w / PPM / 2, h / PPM / 1, 60f / PPM);
-//	    shapeManager.spawnSphericObject(w / PPM / 2, h / PPM / 1.2f, 10f / PPM);
-//	    shapeManager.spawnSphericObject(w / PPM / 2, h / PPM / 1.0f, 15f / PPM);
-//	    shapeManager.spawnSphericObject(w / PPM / 2 / 5.0f, h / PPM / 1.0f, 20f / PPM);
-	    
-	    
-		
+
+		level.start();
 	}
 
 	TimerTask myTask = new TimerTask() {
@@ -114,9 +121,8 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void render(float delta) {
 
-		if(spawn) {
-			spawn = false;
-			shapeManager.spawnSquareObject(MathUtils.random(0, w / PPM), h / PPM, 25f / PPM);
+		if(level.getStatus()!=null) {
+			shapeController.spawn(level.getStatus());
 		}
 
 		// Batcher jobs

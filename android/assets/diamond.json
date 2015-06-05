@@ -1,0 +1,1 @@
+{"rigidBodies":[{"name":"gem_square.png","imagePath":"/gem_square.png","origin":{"x":0,"y":0},"polygons":[[{"x":0.5,"y":0},{"x":1,"y":0.5},{"x":0.5,"y":1},{"x":0,"y":0.5}]],"circles":[],"shapes":[{"type":"POLYGON","vertices":[{"x":0,"y":0.5},{"x":0.5,"y":1},{"x":1,"y":0.5},{"x":0.5,"y":0}]},{"type":"POLYGON","vertices":[{"x":-0.375,"y":1.125}]}]}],"dynamicObjects":[]}
