@@ -6,4 +6,8 @@ import com.badlogic.gdx.files.FileHandle;
 public class Settings {
 	public static boolean soundEnabled = true;
 
+	public static void save(){
+
+	}
+
 }

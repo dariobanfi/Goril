@@ -1,10 +1,12 @@
 package com.ambigioz.goril;
 
 
+import com.ambigioz.goril.controller.InputController;
 import com.ambigioz.goril.controller.ShapeController;
 import com.ambigioz.goril.models.Ground;
 import com.ambigioz.goril.models.Level;
 import com.ambigioz.goril.models.Tray;
+import com.ambigioz.goril.models.objects.FallingObject;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -16,45 +18,42 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.ambigioz.goril.util.Constants;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class GameScreen implements Screen, InputProcessor {
+public class GameScreen implements Screen {
     
-    static final float BOX_STEP=1/60f;
-    static final int BOX_VELOCITY_ITERATIONS=8;
-    static final int BOX_POSITION_ITERATIONS=3;
+
     static final float PPM = 100;
-    static float WALK_SPEED = 1.0f;
-	static float ROTATION_SPEED = 1.0f;
+
 	boolean spawn = false;
-    private World world;
-    private Box2DDebugRenderer debugRenderer;
-    private OrthographicCamera b2dCam;
-    private SpriteBatch batcher;
-    private Game game;
-    private Tray tray;
-    private Vector2 movement;
-    private float rotation;
-    private Array<Body> tempBodies = new Array<Body>();
-    private float w;
-    private float h;
-    private ShapeController shapeController;
-	private Level level;
+    public World world;
+    public Box2DDebugRenderer debugRenderer;
+    public OrthographicCamera b2dCam;
+    public SpriteBatch batcher;
+    public Goril game;
+    public Tray tray;
+    public Vector2 movement;
+    public float rotation;
+    public Array<Body> tempBodies = new Array<Body>();
+    public float w;
+    public float h;
+    public ShapeController shapeController;
+	public Level level;
 
 
-	public GameScreen(Game game){
+	public GameScreen(Goril game){
 		this.game = game;
-        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(new InputController(this));
 
-        w = Gdx.graphics.getWidth();
-        h = Gdx.graphics.getHeight();
+        w = 360;
+        h = 480;
 
-		Timer timer = new Timer();
-		timer.schedule(myTask, 1000, 3000);
+		setLevel(new Level());
 	}
 
 
@@ -64,22 +63,8 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	@Override
 	public void show() {
-
 		setupWorld();
-
 		initGame();
-
-
-//	    shapeController.spawnSquareObject(w / PPM / 2, h / PPM / 1.5f, 50f / PPM);
-//	    shapeController.spawnRectangleGemObject(w / PPM / 2, h / PPM / 1f);
-//	    shapeController.spawnHexagonalObject(w / PPM / 2, h / PPM / 1, 80f / PPM);
-//	    shapeController.spawnEquilateralTriangleObject(w / PPM / 2, h / PPM / 1, 60f / PPM);
-//	    shapeController.spawnSphericObject(w / PPM / 2, h / PPM / 1.2f, 10f / PPM);
-//	    shapeController.spawnSphericObject(w / PPM / 2, h / PPM / 1.0f, 15f / PPM);
-//	    shapeController.spawnSphericObject(w / PPM / 2 / 5.0f, h / PPM / 1.0f, 20f / PPM);
-	    
-	    
-		
 	}
 
 	public void setupWorld(){
@@ -99,30 +84,31 @@ public class GameScreen implements Screen, InputProcessor {
 
 
 	public void initGame(){
+
 		//Ground body
 		Ground ground = new Ground(world);
-		ground.init(w,h);
+		ground.init(w, h);
 
 		// Tray
 		tray = new Tray(world);
-		tray.init(w,h);
+		tray.init(w, h);
 
 
 		level.start();
 	}
 
-	TimerTask myTask = new TimerTask() {
-		@Override
-		public void run() {
-			spawn = true;
-		}
-	};
-	
+
 	@Override
 	public void render(float delta) {
 
-		if(level.getStatus()!=null) {
-			shapeController.spawn(level.getStatus());
+		if(level.isSpawn()) {
+			FallingObject nextFallingObject = level.getNextObject();
+			if(nextFallingObject != null) {
+				shapeController.spawn(nextFallingObject);
+			}
+			else {
+				showEndLevelMessage();
+			}
 		}
 
 		// Batcher jobs
@@ -149,10 +135,15 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		// Rendering world
         debugRenderer.render(world, b2dCam.combined);  
-        world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);     
+        world.step(Constants.BOX_STEP, Constants.BOX_VELOCITY_ITERATIONS, Constants.BOX_POSITION_ITERATIONS);
         tray.setLinearVelocity(movement);
         tray.setAngularVelocity(rotation);
 	}
+
+	public void showEndLevelMessage() {
+		// TODO show hold thight message
+	}
+
 	@Override
 	public void resize(int width, int height) {
 		b2dCam.viewportWidth = width / PPM;
@@ -183,112 +174,6 @@ public class GameScreen implements Screen, InputProcessor {
 		
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
 
-		switch(keycode){
-		case(Keys.ESCAPE):
-        	((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(game));
-		case(Keys.A):
-			System.out.println("Pressed UP");
-			movement.x = -WALK_SPEED;
-			break;
-		case(Keys.S):
-			System.out.println("Pressed DOWN");
-			movement.x = WALK_SPEED;
-			break;
-		
-		case(Keys.LEFT):
-			System.out.println("Pressed Left");
-			rotation = ROTATION_SPEED;
-			break;
-
-		case(Keys.M):
-			spawn = true;
-			break;
-
-			case(Keys.RIGHT):
-				System.out.println("Pressed Right");
-				rotation = -ROTATION_SPEED;
-				break;
-		}
-
-
-		return true;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		switch(keycode){
-		case(Keys.A):
-			movement.x = 0;
-			break;
-		case(Keys.S):
-			movement.x = 0;
-			break;
-			
-		case(Keys.LEFT):
-			System.out.println("Pressed Left");
-			rotation = 0;
-			break;
-		
-		case(Keys.RIGHT):
-			System.out.println("Pressed Right");
-			rotation = 0;
-			break;
-		
-		}
-		
-
-		return true;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		
-		if(screenX<=w/2){
-			movement.x = -WALK_SPEED;
-		}
-		else{
-			movement.x = WALK_SPEED;
-		}
-		
-		return true;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if(screenX<=w/2){
-			movement.x = 0;
-		}
-		else{
-			movement.x = 0;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

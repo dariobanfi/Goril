@@ -59,7 +59,7 @@ public class Assets {
 		ready = new TextureRegion(items, 320, 224, 192, 32);
 		gameOver = new TextureRegion(items, 352, 256, 160, 96);
 		highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
-		//logo = new TextureRegion(items, 0, 352, 274, 142);
+		logo = new TextureRegion(items, 0, 352, 274, 142);
 		soundOff = new TextureRegion(items, 0, 0, 64, 64);
 		soundOn = new TextureRegion(items, 64, 0, 64, 64);
 		arrow = new TextureRegion(items, 0, 64, 64, 64);
@@ -72,9 +72,9 @@ public class Assets {
 		font = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"), false);
 
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-		music.setLooping(true);
-		music.setVolume(0.5f);
-		if (Settings.soundEnabled) music.play();
+//		music.setLooping(true);
+//		music.setVolume(0.5f);
+//		if (Settings.soundEnabled) music.play();
 		jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
 		highJumpSound = Gdx.audio.newSound(Gdx.files.internal("highjump.wav"));
 		hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
