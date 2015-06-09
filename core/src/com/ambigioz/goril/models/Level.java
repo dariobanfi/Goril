@@ -17,19 +17,20 @@ public class Level {
         return spawn;
     }
 
+    public long startTime;
     public boolean spawn;
 
 
     public Level(){
         levelObjects = new Stack<>();
-        levelObjects.add(new SquareGem(MathUtils.random(0, 200 / Constants.PPM), 360 / Constants.PPM, 25f / Constants.PPM,25f / Constants.PPM));
-        levelObjects.add(new SquareGem(MathUtils.random(0, 200 / Constants.PPM), 360 / Constants.PPM, 25f / Constants.PPM,25f / Constants.PPM));
-        levelObjects.add(new SquareGem(MathUtils.random(0, 200 / Constants.PPM), 360 / Constants.PPM, 25f / Constants.PPM,25f / Constants.PPM));
-
+        levelObjects.add(new SquareGem(200, 200, 25f, 25f));
+        levelObjects.add(new SquareGem(200, 200, 35f, 35f));
+        levelObjects.add(new SquareGem(200, 200, 45f, 45f));
     }
 
 
-    public void start(){
+    public void start(long startTime){
+        this.startTime = startTime;
         Timer timer = new Timer();
         timer.schedule(myTask, 500, 3000);
         System.currentTimeMillis();

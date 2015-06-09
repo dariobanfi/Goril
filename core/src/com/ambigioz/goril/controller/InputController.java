@@ -33,12 +33,12 @@ public class InputController implements InputProcessor {
 
             case(Input.Keys.LEFT):
                 System.out.println("Pressed Left");
-                gameScreen.rotation = Constants.ROTATION_SPEED;
+                gameScreen.tray.setAngularVelocity(Constants.ROTATION_SPEED);
                 break;
 
             case(Input.Keys.RIGHT):
                 System.out.println("Pressed Right");
-                gameScreen.rotation = -Constants.ROTATION_SPEED;
+                gameScreen.tray.setAngularVelocity(-Constants.ROTATION_SPEED);
                 break;
         }
 
@@ -58,12 +58,12 @@ public class InputController implements InputProcessor {
 
             case(Input.Keys.LEFT):
                 System.out.println("Pressed Left");
-                gameScreen.rotation = 0;
+                gameScreen.tray.setAngularVelocity(0);
                 break;
 
             case(Input.Keys.RIGHT):
                 System.out.println("Pressed Right");
-                gameScreen.rotation = 0;
+                gameScreen.tray.setAngularVelocity(0);
                 break;
 
         }
