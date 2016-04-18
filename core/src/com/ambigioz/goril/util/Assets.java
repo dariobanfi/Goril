@@ -70,7 +70,6 @@ public class Assets {
 
 
 		font = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"), false);
-
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 //		music.setLooping(true);
 //		music.setVolume(0.5f);

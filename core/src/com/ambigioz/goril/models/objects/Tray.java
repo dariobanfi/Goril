@@ -60,12 +60,19 @@ public class Tray {
     }
 
     private void checkMaxDistance() {
-        Gdx.app.log("", "" + trayBody.getPosition().x * Constants.PPM);
-        if (trayBody.getPosition().x * Constants.PPM < 0 - Constants.SCREEN_OFFSET) {
+        if (trayBody.getPosition().x * Constants.PPM < 0 - Constants.SCREEN_OFFSET && movement.x<0) {
             this.movement.x = 0;
-        } else if (trayBody.getPosition().x * Constants.PPM > Constants.WIDTH + Constants.SCREEN_OFFSET) {
+        } else if (trayBody.getPosition().x * Constants.PPM > Constants.WIDTH + Constants.SCREEN_OFFSET && movement.x>0) {
             this.movement.x = 0;
         }
+    }
+
+    public boolean canGoLeft(){
+        return ! (trayBody.getPosition().x * Constants.PPM < 0 - Constants.SCREEN_OFFSET);
+    }
+
+    public boolean canGoRight(){
+        return ! (trayBody.getPosition().x * Constants.PPM > Constants.WIDTH + Constants.SCREEN_OFFSET);
     }
 
     /**
@@ -73,7 +80,9 @@ public class Tray {
      */
     public void render(){
         this.setLinearVelocity(movement);
-//        checkMaxDistance();
+        checkMaxDistance();
         checkMaxAngle();
     }
+
+
 }

@@ -2,12 +2,10 @@ package com.ambigioz.goril.screens;
 
 
 import com.ambigioz.goril.Goril;
-import com.ambigioz.goril.controller.GameState;
 import com.ambigioz.goril.controller.InputController;
 import com.ambigioz.goril.controller.ShapeController;
 import com.ambigioz.goril.models.levels.Level;
-import com.ambigioz.goril.models.levels.Level1;
-import com.ambigioz.goril.models.objects.FallingObject;
+import com.ambigioz.goril.models.levels.LevelConfigs;
 import com.ambigioz.goril.models.objects.Ground;
 import com.ambigioz.goril.models.objects.Tray;
 import com.ambigioz.goril.models.objects.Wall;
@@ -17,6 +15,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -50,7 +49,7 @@ public class GameScreen extends ScreenAdapter {
     public Level level;
     public float accumulator;
 
-    private GameState gameState;
+    GlyphLayout glyphLayout = new GlyphLayout();
 
 
     public GameScreen(Goril game) {
@@ -67,8 +66,6 @@ public class GameScreen extends ScreenAdapter {
         b2dCam.update();
 
         debugRenderer = new Box2DDebugRenderer();
-
-        setLevel(new Level1());
     }
 
 
@@ -80,7 +77,7 @@ public class GameScreen extends ScreenAdapter {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
                 if (ground.getFixture().equals(fixtureA) || ground.getFixture().equals(fixtureB)) {
-                    gameState = GameState.LOSE;
+                    level.setLost();
                 }
             }
 
@@ -114,6 +111,8 @@ public class GameScreen extends ScreenAdapter {
         world = new World(new Vector2(0, -8.21f), true);
         createCollisionListener();
         shapeController = new ShapeController(world);
+        setLevel(new Level(shapeController, LevelConfigs.getLevel1()));
+
     }
 
 
@@ -132,11 +131,12 @@ public class GameScreen extends ScreenAdapter {
         tray = new Tray(world);
         tray.init(w, h);
 
-        level.start();
-        gameState = GameState.PLAYING;
+        level.start(accumulator);
     }
 
     public void update() {
+        accumulator += Gdx.graphics.getDeltaTime();
+        level.update(accumulator);
         b2dCam.update();
     }
 
@@ -144,17 +144,6 @@ public class GameScreen extends ScreenAdapter {
         // game.batcher jobs
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        accumulator += Gdx.graphics.getDeltaTime();
-
-        if (level.isSpawn()) {
-            FallingObject nextFallingObject = level.getNextObject();
-            if (nextFallingObject != null) {
-                shapeController.spawn(nextFallingObject);
-            } else {
-                gameState = GameState.HOLD_TIGHT;
-            }
-        }
 
 
         game.batcher.setProjectionMatrix(b2dCam.combined);
@@ -173,13 +162,17 @@ public class GameScreen extends ScreenAdapter {
             }
         }
 
+        level.render();
 
-        if (gameState.equals(GameState.PLAYING)) {
 
-        } else if (gameState.equals(GameState.HOLD_TIGHT)) {
-            showHoldTightMessage();
-        } else if (gameState.equals(GameState.LOSE)) {
+        if (level.isLost()) {
             showLoseMessage();
+        }
+        if (level.isShowHoldTight()){
+            showHoldTightMessage();
+        }
+        if (level.isWon()) {
+            showWinMessage();
         }
 
         game.batcher.end();
@@ -191,15 +184,21 @@ public class GameScreen extends ScreenAdapter {
         tray.render();
     }
 
+    private void showHoldTightMessage() {
+        game.batcher.draw(com.ambigioz.goril.util.Assets.ready, 55 / Constants.PPM, 300 / Constants.PPM, 200 / Constants.PPM, 30 / Constants.PPM);
+    }
+
+    private void showWinMessage() {
+        glyphLayout.setText(Assets.font, "You WIN!");
+        Assets.font.draw(game.batcher, glyphLayout, 160 - glyphLayout.width / 2 / Constants.PPM, 200 - 40 / Constants.PPM);
+    }
+
     @Override
     public void render(float delta) {
         update();
         draw();
     }
 
-    private void showHoldTightMessage() {
-        game.batcher.draw(com.ambigioz.goril.util.Assets.ready, 55 / Constants.PPM, 300 / Constants.PPM, 200 / Constants.PPM, 30 / Constants.PPM);
-    }
 
     public void showLoseMessage() {
         game.batcher.draw(Assets.gameOver, 60 / Constants.PPM, 300 / Constants.PPM, 200 / Constants.PPM, 120 / Constants.PPM);
@@ -211,10 +210,4 @@ public class GameScreen extends ScreenAdapter {
         debugRenderer.dispose();
     }
 
-
-    public interface GameScreenInterface {
-        public void endObjects();
-
-        public void spawnObject(FallingObject object);
-    }
 }

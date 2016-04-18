@@ -12,6 +12,11 @@ public class InputController implements InputProcessor {
 
     public GameScreen gameScreen;
 
+    boolean moveLeftDown;
+    boolean moveRightDown;
+    boolean rotateLeftDown;
+    boolean rotateRightDown;
+
     public InputController(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
@@ -23,17 +28,23 @@ public class InputController implements InputProcessor {
             case(Input.Keys.ESCAPE):
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(gameScreen.game));
             case(Input.Keys.A):
-                gameScreen.tray.movement.x = -Constants.WALK_SPEED;
+                moveLeftDown = true;
+                if(gameScreen.tray.canGoLeft())
+                    gameScreen.tray.movement.x = -Constants.WALK_SPEED;
                 break;
             case(Input.Keys.S):
-                gameScreen.tray.movement.x = Constants.WALK_SPEED;
+                moveRightDown = true;
+                if(gameScreen.tray.canGoRight())
+                    gameScreen.tray.movement.x = Constants.WALK_SPEED;
                 break;
 
             case(Input.Keys.LEFT):
+                rotateLeftDown = true;
                 gameScreen.tray.setAngularVelocity(Constants.ROTATION_SPEED);
                 break;
 
             case(Input.Keys.RIGHT):
+                rotateRightDown = true;
                 gameScreen.tray.setAngularVelocity(-Constants.ROTATION_SPEED);
                 break;
         }
@@ -46,29 +57,34 @@ public class InputController implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch(keycode){
             case(Input.Keys.A):
-                gameScreen.tray.movement.x = 0;
+                moveLeftDown = false;
+                if(!moveRightDown)
+                    gameScreen.tray.movement.x = 0;
                 break;
             case(Input.Keys.S):
-                gameScreen.tray.movement.x = 0;
+                moveRightDown = false;
+                if(!moveLeftDown)
+                    gameScreen.tray.movement.x = 0;
                 break;
 
             case(Input.Keys.LEFT):
-                gameScreen.tray.setAngularVelocity(0);
+                rotateLeftDown = false;
+                if(!rotateRightDown)
+                    gameScreen.tray.setAngularVelocity(0);
                 break;
 
             case(Input.Keys.RIGHT):
-                gameScreen.tray.setAngularVelocity(0);
+                rotateRightDown = false;
+                if(!rotateLeftDown)
+                    gameScreen.tray.setAngularVelocity(0);
                 break;
 
         }
-
-
         return true;
     }
 
     @Override
     public boolean keyTyped(char character) {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -98,19 +114,16 @@ public class InputController implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
-        // TODO Auto-generated method stub
         return false;
     }
 }

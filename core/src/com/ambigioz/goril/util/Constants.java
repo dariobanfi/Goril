@@ -11,4 +11,5 @@ public class Constants {
     public static final int SCREEN_OFFSET = 20;
     public static float WALK_SPEED = 1.0f;
     public static float ROTATION_SPEED = 1.0f;
+    public static float SPAWN_HEIGHT = Constants.HEIGHT + 20;
 }
