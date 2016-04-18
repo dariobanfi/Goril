@@ -1,6 +1,6 @@
 package com.ambigioz.goril.models.objects;
 
-import com.ambigioz.goril.Assets;
+import com.ambigioz.goril.util.Assets;
 import com.ambigioz.goril.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -31,8 +31,21 @@ public class SquareGem implements FallingObject {
     private float sizeX;
     private float sizeY;
 
+    /**
+     *
+     * @param positionX min 0, max 100
+     * @param positionY
+     * @param sizeX
+     * @param sizeY
+     */
     public SquareGem(float positionX, float positionY, float sizeX, float sizeY) {
-        this.positionX = positionX / Constants.PPM;
+        this.positionX = Constants.WIDTH * positionX / 100 / Constants.PPM;
+        if(this.positionX<(sizeX/Constants.PPM/2)){
+            this.positionX = sizeX/Constants.PPM;
+        }
+        else if (this.positionX >= (Constants.WIDTH / Constants.PPM)-sizeX/2/Constants.PPM){
+            this.positionX = (Constants.WIDTH - sizeX)/Constants.PPM;
+        }
         this.positionY = positionY / Constants.PPM;
         this.sizeX = sizeX / Constants.PPM;
         this.sizeY = sizeY / Constants.PPM;
@@ -56,7 +69,7 @@ public class SquareGem implements FallingObject {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = dynamicPolygon;
         fixtureDef.density = 3.1f;
-        fixtureDef.friction = 20.0f;
+        fixtureDef.friction = 0.0f;
         fixtureDef.restitution = 0.0f;
 
 

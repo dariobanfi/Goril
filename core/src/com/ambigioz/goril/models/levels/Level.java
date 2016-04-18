@@ -1,4 +1,4 @@
-package com.ambigioz.goril.models;
+package com.ambigioz.goril.models.levels;
 
 import com.ambigioz.goril.models.objects.FallingObject;
 import com.ambigioz.goril.models.objects.SquareGem;
@@ -18,22 +18,20 @@ public class Level {
     }
 
     public long startTime;
+    public long endTime;
     public boolean spawn;
-
+    public float spawnHeight = Constants.HEIGHT + 20;
 
     public Level(){
         levelObjects = new Stack<>();
-        levelObjects.add(new SquareGem(200, 200, 25f, 25f));
-        levelObjects.add(new SquareGem(200, 200, 35f, 35f));
-        levelObjects.add(new SquareGem(200, 200, 45f, 45f));
+        levelObjects.add(new SquareGem(MathUtils.random(0, 100), spawnHeight, 25f, 25f));
+//        levelObjects.add(new SquareGem(MathUtils.random(0, 100), spawnHeight, 35f, 35f));
+//        levelObjects.add(new SquareGem(MathUtils.random(0, 100), spawnHeight, 15f, 15f));
     }
 
-
-    public void start(long startTime){
-        this.startTime = startTime;
+    public void start(){
         Timer timer = new Timer();
-        timer.schedule(myTask, 500, 3000);
-        System.currentTimeMillis();
+        timer.schedule(myTask, 500, 5000);
     }
 
 

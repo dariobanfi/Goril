@@ -9,4 +9,7 @@ public class Constants {
 
     public static float WALK_SPEED = 1.0f;
     public static float ROTATION_SPEED = 1.0f;
+
+    public static final int WIDTH = 320;
+    public static final int HEIGHT = 480;
 }

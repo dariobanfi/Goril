@@ -1,7 +1,6 @@
 package com.ambigioz.goril.controller;
 
-import com.ambigioz.goril.Assets;
-import com.ambigioz.goril.GameScreen;
+import com.ambigioz.goril.util.Assets;
 import com.ambigioz.goril.models.objects.FallingObject;
 import com.ambigioz.goril.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;

@@ -1,4 +1,4 @@
-package com.ambigioz.goril;
+package com.ambigioz.goril.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

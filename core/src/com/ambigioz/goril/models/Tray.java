@@ -9,6 +9,12 @@ public class Tray {
     private World world;
     public Body trayBody;
 
+    public Fixture getFixture() {
+        return fixture;
+    }
+
+    public Fixture fixture;
+
     public Tray(World word){
         this.world = word;
     }
@@ -23,10 +29,9 @@ public class Tray {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = dynamicPolygon;
         fixtureDef.density = 1.0f;
-        fixtureDef.friction = 10.5f;
+        fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.6f;
-        trayBody.createFixture(fixtureDef);
-
+        fixture = trayBody.createFixture(fixtureDef);
     }
 
 
@@ -37,5 +42,25 @@ public class Tray {
     public void setAngularVelocity(float rotation){
         trayBody.setAngularVelocity(rotation);
     }
+
+    public void checkMaxAngle(){
+        if(trayBody.getAngle() >= 0.7){
+            trayBody.setAngularVelocity(0);
+        }
+        else if(trayBody.getAngle() <= -0.7){
+            trayBody.setAngularVelocity(0);
+        }
+    }
+
+    /**
+     * Checks wether the rotation value does not exceed the limit
+     */
+    public void render(){
+        checkMaxAngle();
+    }
+
+
+
+
 
 }

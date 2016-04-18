@@ -1,4 +1,4 @@
-package com.ambigioz.goril;
+package com.ambigioz.goril.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -55,7 +55,7 @@ public class Assets {
 		
 		items = loadTexture("items.png");
 		mainMenu = new TextureRegion(items, 0, 224, 300, 110);
-		pauseMenu = new TextureRegion(items, 224, 128, 192, 96);
+		pauseMenu = new TextureRegion(items, 224,  128, 192, 96);
 		ready = new TextureRegion(items, 320, 224, 192, 32);
 		gameOver = new TextureRegion(items, 352, 256, 160, 96);
 		highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
@@ -83,6 +83,6 @@ public class Assets {
 	}
 
 	public static void playSound (Sound sound) {
-		if (Settings.soundEnabled) sound.play(1);
+		if (com.ambigioz.goril.util.Settings.soundEnabled) sound.play(1);
 	}
 }

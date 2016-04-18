@@ -1,7 +1,7 @@
 package com.ambigioz.goril.controller;
 
-import com.ambigioz.goril.GameScreen;
-import com.ambigioz.goril.MainMenuScreen;
+import com.ambigioz.goril.screens.GameScreen;
+import com.ambigioz.goril.screens.MainMenuScreen;
 import com.ambigioz.goril.util.Constants;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -23,21 +23,17 @@ public class InputController implements InputProcessor {
             case(Input.Keys.ESCAPE):
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(gameScreen.game));
             case(Input.Keys.A):
-                System.out.println("Pressed UP");
                 gameScreen.movement.x = -Constants.WALK_SPEED;
                 break;
             case(Input.Keys.S):
-                System.out.println("Pressed DOWN");
                 gameScreen.movement.x = Constants.WALK_SPEED;
                 break;
 
             case(Input.Keys.LEFT):
-                System.out.println("Pressed Left");
                 gameScreen.tray.setAngularVelocity(Constants.ROTATION_SPEED);
                 break;
 
             case(Input.Keys.RIGHT):
-                System.out.println("Pressed Right");
                 gameScreen.tray.setAngularVelocity(-Constants.ROTATION_SPEED);
                 break;
         }
@@ -57,12 +53,10 @@ public class InputController implements InputProcessor {
                 break;
 
             case(Input.Keys.LEFT):
-                System.out.println("Pressed Left");
                 gameScreen.tray.setAngularVelocity(0);
                 break;
 
             case(Input.Keys.RIGHT):
-                System.out.println("Pressed Right");
                 gameScreen.tray.setAngularVelocity(0);
                 break;
 

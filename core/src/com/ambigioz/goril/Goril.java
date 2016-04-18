@@ -1,12 +1,6 @@
 package com.ambigioz.goril;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Goril extends Game {
@@ -16,8 +10,8 @@ public class Goril extends Game {
 	@Override
 	public void create () {
 		batcher = new SpriteBatch();
-		Assets.load();
-		setScreen(new MainMenuScreen(this));
+		com.ambigioz.goril.util.Assets.load();
+		setScreen(new com.ambigioz.goril.screens.MainMenuScreen(this));
 	}
 
 	@Override
