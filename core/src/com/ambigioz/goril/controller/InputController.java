@@ -23,10 +23,10 @@ public class InputController implements InputProcessor {
             case(Input.Keys.ESCAPE):
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(gameScreen.game));
             case(Input.Keys.A):
-                gameScreen.movement.x = -Constants.WALK_SPEED;
+                gameScreen.tray.movement.x = -Constants.WALK_SPEED;
                 break;
             case(Input.Keys.S):
-                gameScreen.movement.x = Constants.WALK_SPEED;
+                gameScreen.tray.movement.x = Constants.WALK_SPEED;
                 break;
 
             case(Input.Keys.LEFT):
@@ -46,10 +46,10 @@ public class InputController implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch(keycode){
             case(Input.Keys.A):
-                gameScreen.movement.x = 0;
+                gameScreen.tray.movement.x = 0;
                 break;
             case(Input.Keys.S):
-                gameScreen.movement.x = 0;
+                gameScreen.tray.movement.x = 0;
                 break;
 
             case(Input.Keys.LEFT):
@@ -76,10 +76,10 @@ public class InputController implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
         if(screenX<=gameScreen.w/2){
-            gameScreen.movement.x = -Constants.WALK_SPEED;
+            gameScreen.tray.movement.x = -Constants.WALK_SPEED;
         }
         else{
-            gameScreen.movement.x = Constants.WALK_SPEED;
+            gameScreen.tray.movement.x = Constants.WALK_SPEED;
         }
 
         return true;
@@ -88,10 +88,10 @@ public class InputController implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if(screenX<=gameScreen.w/2){
-            gameScreen.movement.x = 0;
+            gameScreen.tray.movement.x = 0;
         }
         else{
-            gameScreen.movement.x = 0;
+            gameScreen.tray.movement.x = 0;
         }
         return true;
     }

@@ -1,15 +1,17 @@
 package com.ambigioz.goril.screens;
 
 
-import com.ambigioz.goril.controller.GameState;
-import com.ambigioz.goril.util.Assets;
 import com.ambigioz.goril.Goril;
+import com.ambigioz.goril.controller.GameState;
 import com.ambigioz.goril.controller.InputController;
 import com.ambigioz.goril.controller.ShapeController;
-import com.ambigioz.goril.models.Ground;
 import com.ambigioz.goril.models.levels.Level;
-import com.ambigioz.goril.models.Tray;
+import com.ambigioz.goril.models.levels.Level1;
 import com.ambigioz.goril.models.objects.FallingObject;
+import com.ambigioz.goril.models.objects.Ground;
+import com.ambigioz.goril.models.objects.Tray;
+import com.ambigioz.goril.models.objects.Wall;
+import com.ambigioz.goril.util.Assets;
 import com.ambigioz.goril.util.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -19,7 +21,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 
@@ -32,7 +41,8 @@ public class GameScreen extends ScreenAdapter {
     public Goril game;
     public Tray tray;
     public Ground ground;
-    public Vector2 movement;
+    public Wall wallLeft;
+    public Wall wallRight;
     public Array<Body> tempBodies = new Array<>();
     public float w;
     public float h;
@@ -58,7 +68,7 @@ public class GameScreen extends ScreenAdapter {
 
         debugRenderer = new Box2DDebugRenderer();
 
-        setLevel(new Level());
+        setLevel(new Level1());
     }
 
 
@@ -101,7 +111,6 @@ public class GameScreen extends ScreenAdapter {
 
     public void setupWorld() {
         game.batcher = new SpriteBatch();
-        movement = new Vector2();
         world = new World(new Vector2(0, -8.21f), true);
         createCollisionListener();
         shapeController = new ShapeController(world);
@@ -110,9 +119,14 @@ public class GameScreen extends ScreenAdapter {
 
     public void initGame() {
 
-        //Ground body
+        // Ground and walls
         ground = new Ground(world);
+        wallLeft = new Wall(world);
+        wallRight = new Wall(world);
+
         ground.init(w, h);
+        wallRight.initRight(w, h);
+        wallLeft.initLeft(w, h);
 
         // Tray
         tray = new Tray(world);
@@ -174,8 +188,6 @@ public class GameScreen extends ScreenAdapter {
         debugRenderer.render(world, b2dCam.combined);
         world.step(Constants.BOX_STEP, Constants.BOX_VELOCITY_ITERATIONS, Constants.BOX_POSITION_ITERATIONS);
 
-
-        tray.setLinearVelocity(movement);
         tray.render();
     }
 

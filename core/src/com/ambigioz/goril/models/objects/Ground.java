@@ -1,13 +1,23 @@
-package com.ambigioz.goril.models;
+package com.ambigioz.goril.models.objects;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
 import com.ambigioz.goril.util.Constants;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 
 public class Ground {
 
     World world;
+    Fixture fixture;
+    Body body;
+
+    public Ground(World world) {
+        this.world = world;
+    }
 
     public Fixture getFixture() {
         return fixture;
@@ -15,13 +25,6 @@ public class Ground {
 
     public Body getBody() {
         return body;
-    }
-
-    Fixture fixture;
-    Body body;
-
-    public Ground(World  world){
-        this.world = world;
     }
 
     public void init(float w, float h) {

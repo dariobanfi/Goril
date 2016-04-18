@@ -1,22 +1,29 @@
-package com.ambigioz.goril.models;
+package com.ambigioz.goril.models.objects;
 
 import com.ambigioz.goril.util.Constants;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Tray {
 
-    private World world;
     public Body trayBody;
-
-    public Fixture getFixture() {
-        return fixture;
-    }
-
+    public Vector2 movement;
     public Fixture fixture;
+    private World world;
 
     public Tray(World word){
         this.world = word;
+        movement = new Vector2();
+    }
+
+    public Fixture getFixture() {
+        return fixture;
     }
 
     public void init(float w, float h){
@@ -52,15 +59,21 @@ public class Tray {
         }
     }
 
+    private void checkMaxDistance() {
+        Gdx.app.log("", "" + trayBody.getPosition().x * Constants.PPM);
+        if (trayBody.getPosition().x * Constants.PPM < 0 - Constants.SCREEN_OFFSET) {
+            this.movement.x = 0;
+        } else if (trayBody.getPosition().x * Constants.PPM > Constants.WIDTH + Constants.SCREEN_OFFSET) {
+            this.movement.x = 0;
+        }
+    }
+
     /**
      * Checks wether the rotation value does not exceed the limit
      */
     public void render(){
+        this.setLinearVelocity(movement);
+//        checkMaxDistance();
         checkMaxAngle();
     }
-
-
-
-
-
 }
