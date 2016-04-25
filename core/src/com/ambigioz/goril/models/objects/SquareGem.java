@@ -7,29 +7,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-public class SquareGem implements FallingObject {
+public class SquareGem extends FallingObject {
 
-    private float positionX;
-    private float positionY;
-
-    public float getPositionX() {
-        return positionX;
-    }
-
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public float getSizeX() {
-        return sizeX;
-    }
-
-    public float getSizeY() {
-        return sizeY;
-    }
-
-    private float sizeX;
-    private float sizeY;
 
     /**
      *
@@ -38,17 +17,8 @@ public class SquareGem implements FallingObject {
      * @param sizeX
      * @param sizeY
      */
-    public SquareGem(float positionX, float positionY, float sizeX, float sizeY) {
-        this.positionX = Constants.WIDTH * positionX / 100 / Constants.PPM;
-        if(this.positionX<(sizeX/Constants.PPM/2)){
-            this.positionX = sizeX/Constants.PPM;
-        }
-        else if (this.positionX >= (Constants.WIDTH / Constants.PPM)-sizeX/2/Constants.PPM){
-            this.positionX = (Constants.WIDTH - sizeX)/Constants.PPM;
-        }
-        this.positionY = positionY / Constants.PPM;
-        this.sizeX = sizeX / Constants.PPM;
-        this.sizeY = sizeY / Constants.PPM;
+    public SquareGem(float positionX, float positionY, float sizeX, float sizeY, float rotation) {
+        super(positionX, positionY, sizeX, sizeY, rotation, 0);
     }
 
     public BodyDef getBodyDef(){

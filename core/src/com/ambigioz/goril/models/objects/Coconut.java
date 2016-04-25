@@ -4,53 +4,31 @@ import com.ambigioz.goril.util.Assets;
 import com.ambigioz.goril.util.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-public class Coconut implements FallingObject {
+public class Coconut extends FallingObject {
 
-    private float positionX;
-    private float positionY;
+    private float size;
 
-    public float getPositionX() {
-        return positionX;
+
+    public float getSize() {
+        return size;
     }
-
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public float getSizeX() {
-        return sizeX;
-    }
-
-    public float getSizeY() {
-        return sizeY;
-    }
-
-    private float sizeX;
-    private float sizeY;
 
     /**
      *
-     * @param positionX min 0, max 100
-     * @param positionY
-     * @param sizeX
-     * @param sizeY
+     * @param x min 0, max 100
+     * @param y
+     * @param size
      */
-    public Coconut(float positionX, float positionY, float sizeX, float sizeY) {
-        this.positionX = Constants.WIDTH * positionX / 100 / Constants.PPM;
-        if(this.positionX<(sizeX/Constants.PPM/2)){
-            this.positionX = sizeX/Constants.PPM;
-        }
-        else if (this.positionX >= (Constants.WIDTH / Constants.PPM)-sizeX/2/Constants.PPM){
-            this.positionX = (Constants.WIDTH - sizeX)/Constants.PPM;
-        }
-        this.positionY = positionY / Constants.PPM;
-        this.sizeX = sizeX / Constants.PPM;
-        this.sizeY = sizeY / Constants.PPM;
+    public Coconut(float x, float y, float rotation, float size) {
+        super(x, y, size, size, 0, rotation);
+        this.size = size / Constants.PPM;
     }
 
+    @Override
     public BodyDef getBodyDef(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -61,24 +39,24 @@ public class Coconut implements FallingObject {
         return bodyDef;
     }
 
-
+    @Override
     public FixtureDef getFixtureDef(){
-        PolygonShape dynamicPolygon = new PolygonShape();
-        dynamicPolygon.setAsBox(sizeX, sizeY);
+        CircleShape dynamicCircle = new CircleShape();
+        dynamicCircle.setRadius(size);
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = dynamicPolygon;
+        fixtureDef.shape = dynamicCircle;
         fixtureDef.density = 3.1f;
         fixtureDef.friction = 0.0f;
         fixtureDef.restitution = 0.0f;
 
-
         return fixtureDef;
     }
 
+    @Override
     public Sprite getSprite(){
-        Sprite polySprite = new Sprite(Assets.diamondRhombus);
-        polySprite.setSize(sizeX * 2, sizeY * 2);
+        Sprite polySprite = new Sprite(Assets.shapeSphere);
+        polySprite.setSize(size * 2.9f, size * 2.9f);
         polySprite.setOrigin(polySprite.getWidth()  / 2, polySprite.getHeight() / 2);
         return polySprite;
     }

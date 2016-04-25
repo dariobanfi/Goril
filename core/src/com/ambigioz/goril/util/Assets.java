@@ -27,9 +27,6 @@ public class Assets {
 	public static TextureRegion arrow;
 	public static TextureRegion pause;
 	public static TextureRegion spring;
-	public static TextureRegion castle;
-	public static TextureRegion bobHit;
-	public static TextureRegion platform;
 	public static BitmapFont font;
 
 	public static Music music;
@@ -46,7 +43,7 @@ public class Assets {
 	public static void load () {
 		background = loadTexture("jungle-background.png");
 		//sphere = loadTexture("coconut_test.png");
-		shapeSphere = loadTexture("coconut_clean.png");
+		shapeSphere = loadTexture("coconut_test.png");
 		backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
 		
 		diamondRhombus = loadTexture("gem_full.png");
@@ -66,7 +63,6 @@ public class Assets {
 		pause = new TextureRegion(items, 64, 64, 64, 64);
 
 		spring = new TextureRegion(items, 128, 0, 32, 32);
-		castle = new TextureRegion(items, 128, 64, 64, 64);
 
 
 		font = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"), false);
