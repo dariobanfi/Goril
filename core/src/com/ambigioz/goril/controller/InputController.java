@@ -29,23 +29,23 @@ public class InputController implements InputProcessor {
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(gameScreen.game));
             case(Input.Keys.A):
                 moveLeftDown = true;
-                if(gameScreen.tray.canGoLeft())
-                    gameScreen.tray.movement.x = -Constants.WALK_SPEED;
+                if(gameScreen.gorilTray.canGoLeft())
+                    gameScreen.gorilTray.movement.x = -Constants.WALK_SPEED;
                 break;
             case(Input.Keys.S):
                 moveRightDown = true;
-                if(gameScreen.tray.canGoRight())
-                    gameScreen.tray.movement.x = Constants.WALK_SPEED;
+                if(gameScreen.gorilTray.canGoRight())
+                    gameScreen.gorilTray.movement.x = Constants.WALK_SPEED;
                 break;
 
             case(Input.Keys.LEFT):
                 rotateLeftDown = true;
-                gameScreen.tray.setAngularVelocity(Constants.ROTATION_SPEED);
+                gameScreen.gorilTray.setAngularVelocity(Constants.ROTATION_SPEED);
                 break;
 
             case(Input.Keys.RIGHT):
                 rotateRightDown = true;
-                gameScreen.tray.setAngularVelocity(-Constants.ROTATION_SPEED);
+                gameScreen.gorilTray.setAngularVelocity(-Constants.ROTATION_SPEED);
                 break;
         }
 
@@ -59,24 +59,24 @@ public class InputController implements InputProcessor {
             case(Input.Keys.A):
                 moveLeftDown = false;
                 if(!moveRightDown)
-                    gameScreen.tray.movement.x = 0;
+                    gameScreen.gorilTray.movement.x = 0;
                 break;
             case(Input.Keys.S):
                 moveRightDown = false;
                 if(!moveLeftDown)
-                    gameScreen.tray.movement.x = 0;
+                    gameScreen.gorilTray.movement.x = 0;
                 break;
 
             case(Input.Keys.LEFT):
                 rotateLeftDown = false;
                 if(!rotateRightDown)
-                    gameScreen.tray.setAngularVelocity(0);
+                    gameScreen.gorilTray.setAngularVelocity(0);
                 break;
 
             case(Input.Keys.RIGHT):
                 rotateRightDown = false;
                 if(!rotateLeftDown)
-                    gameScreen.tray.setAngularVelocity(0);
+                    gameScreen.gorilTray.setAngularVelocity(0);
                 break;
 
         }
@@ -92,10 +92,10 @@ public class InputController implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
         if(screenX<=gameScreen.w/2){
-            gameScreen.tray.movement.x = -Constants.WALK_SPEED;
+            gameScreen.gorilTray.movement.x = -Constants.WALK_SPEED;
         }
         else{
-            gameScreen.tray.movement.x = Constants.WALK_SPEED;
+            gameScreen.gorilTray.movement.x = Constants.WALK_SPEED;
         }
 
         return true;
@@ -104,10 +104,10 @@ public class InputController implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if(screenX<=gameScreen.w/2){
-            gameScreen.tray.movement.x = 0;
+            gameScreen.gorilTray.movement.x = 0;
         }
         else{
-            gameScreen.tray.movement.x = 0;
+            gameScreen.gorilTray.movement.x = 0;
         }
         return true;
     }

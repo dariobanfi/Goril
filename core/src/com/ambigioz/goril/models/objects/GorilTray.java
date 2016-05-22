@@ -10,14 +10,14 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Tray {
+public class GorilTray {
 
     public Body trayBody;
     public Vector2 movement;
     public Fixture fixture;
     private World world;
 
-    public Tray(World word){
+    public GorilTray(World word){
         this.world = word;
         movement = new Vector2();
     }
@@ -32,7 +32,7 @@ public class Tray {
         bodyDef.position.set((w / Constants.PPM) / 2 , h / Constants.PPM / 5);
         trayBody = world.createBody(bodyDef);
         PolygonShape dynamicPolygon = new PolygonShape();
-        dynamicPolygon.setAsBox((w / Constants.PPM) / 5 , 0.5f / Constants.PPM);
+        dynamicPolygon.setAsBox((w / Constants.PPM) / 6 , 4f / Constants.PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = dynamicPolygon;
         fixtureDef.density = 1.0f;

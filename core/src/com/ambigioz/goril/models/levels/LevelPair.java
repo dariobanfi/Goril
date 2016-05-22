@@ -1,7 +1,7 @@
 package com.ambigioz.goril.models.levels;
 
 
-import com.ambigioz.goril.models.objects.FallingObject;
+import com.ambigioz.goril.models.objects.falling.FallingObject;
 
 public class LevelPair {
     private FallingObject object;

@@ -6,8 +6,8 @@ import com.ambigioz.goril.controller.InputController;
 import com.ambigioz.goril.controller.ShapeController;
 import com.ambigioz.goril.models.levels.Level;
 import com.ambigioz.goril.models.levels.LevelConfigs;
+import com.ambigioz.goril.models.objects.GorilTray;
 import com.ambigioz.goril.models.objects.Ground;
-import com.ambigioz.goril.models.objects.Tray;
 import com.ambigioz.goril.models.objects.Wall;
 import com.ambigioz.goril.util.Assets;
 import com.ambigioz.goril.util.Constants;
@@ -38,7 +38,7 @@ public class GameScreen extends ScreenAdapter {
     public Box2DDebugRenderer debugRenderer;
     public OrthographicCamera b2dCam;
     public Goril game;
-    public Tray tray;
+    public GorilTray gorilTray;
     public Ground ground;
     public Wall wallLeft;
     public Wall wallRight;
@@ -127,9 +127,9 @@ public class GameScreen extends ScreenAdapter {
         wallRight.initRight(w, h);
         wallLeft.initLeft(w, h);
 
-        // Tray
-        tray = new Tray(world);
-        tray.init(w, h);
+        // GorilTray
+        gorilTray = new GorilTray(world);
+        gorilTray.init(w, h);
 
         level.start(accumulator);
     }
@@ -156,7 +156,9 @@ public class GameScreen extends ScreenAdapter {
         for (Body body : tempBodies) {
             if (body.getUserData() != null && body.getUserData() instanceof Sprite) {
                 Sprite sprite = (Sprite) body.getUserData();
-                sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+                sprite.setPosition(
+                    body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2
+                );
                 sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
                 sprite.draw(game.batcher);
             }
@@ -181,14 +183,16 @@ public class GameScreen extends ScreenAdapter {
         debugRenderer.render(world, b2dCam.combined);
         world.step(Constants.BOX_STEP, Constants.BOX_VELOCITY_ITERATIONS, Constants.BOX_POSITION_ITERATIONS);
 
-        tray.render();
+        gorilTray.render();
     }
 
     private void showHoldTightMessage() {
+        Gdx.app.log(TAG, "Level - Hold Tight");
         game.batcher.draw(com.ambigioz.goril.util.Assets.ready, 55 / Constants.PPM, 300 / Constants.PPM, 200 / Constants.PPM, 30 / Constants.PPM);
     }
 
     private void showWinMessage() {
+        Gdx.app.log(TAG, "Level - Win!");
         glyphLayout.setText(Assets.font, "You WIN!");
         Assets.font.draw(game.batcher, glyphLayout, 160 - glyphLayout.width / 2 / Constants.PPM, 200 - 40 / Constants.PPM);
     }
@@ -201,6 +205,7 @@ public class GameScreen extends ScreenAdapter {
 
 
     public void showLoseMessage() {
+        Gdx.app.log(TAG, "Level - Lost");
         game.batcher.draw(Assets.gameOver, 60 / Constants.PPM, 300 / Constants.PPM, 200 / Constants.PPM, 120 / Constants.PPM);
     }
 
